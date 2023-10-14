@@ -1,25 +1,55 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class ColorPicker extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedColor: null,
+      isColorListVisible: false,
+    };
+  }
+
+  toggleColorList = () => {
+    this.setState((prevState) => ({
+      isColorListVisible: !prevState.isColorListVisible,
+    }));
+  }
+
+  selectColor = (color) => {
+    this.setState({
+      selectedColor: color,
+      isColorListVisible: false,
+    });
+    document.body.style.backgroundColor = color; // Change the background color
+  }
+
+  render() {
+    const colors = ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#F012BE", "#01FF70"];
+    const { selectedColor, isColorListVisible } = this.state;
+
+    return (
+      <div className="color-picker">
+        <div className="color-display" style={{ backgroundColor: selectedColor }}></div>
+        <button onClick={this.toggleColorList}>
+          {isColorListVisible ? "Pick a color" : "Change Color"}
+        </button>
+        {isColorListVisible && (
+          <div className="color-list">
+            {colors.map((color, index) => (
+              <div
+                key={index}
+                className="color"
+                style={{ backgroundColor: color }}
+                onClick={() => this.selectColor(color)}
+              ></div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
-export default App;
+export default ColorPicker;
